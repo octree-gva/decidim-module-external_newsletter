@@ -13,6 +13,13 @@ module Decidim
         resources :external_newsletter
         root to: 'external_newsletter#index'
       end
+      
+      initializer "decidim.external_newsletter" do |app|
+        Decidim.menu :admin_menu do |menu|
+          newsletter_item = menu.items.select {|i| i.url.ends_with?"newsletters" }.first
+          newsletter_item.instance_variable_set(:@if, false)
+        end
+      end
 
       def load_seed
         nil

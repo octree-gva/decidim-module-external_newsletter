@@ -1,2 +1,1 @@
-// = link external_newsletter/remove_newsletter_modal
-
+// = link decidim/external_newsletter/external_newsletter.css
