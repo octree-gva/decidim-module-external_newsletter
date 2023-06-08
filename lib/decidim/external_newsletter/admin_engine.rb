@@ -17,7 +17,7 @@ module Decidim
       initializer "decidim.external_newsletter" do |app|
         Decidim.menu :admin_menu do |menu|
           newsletter_item = menu.items.select {|i| i.url.ends_with?"newsletters" }.first
-          newsletter_item.instance_variable_set(:@if, false)
+          newsletter_item.instance_variable_set(:@if, false) if newsletter_item
         end
       end
 
