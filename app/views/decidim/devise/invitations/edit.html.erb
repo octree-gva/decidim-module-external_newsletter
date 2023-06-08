@@ -21,16 +21,17 @@
 
             <div class="user-nickname">
               <div class="field">
-                <%= f.text_field :nickname, help_text: t("devise.invitations.edit.nickname_help", organization: current_organization.name), required: "required", prefix: { value: "@", small: 1, large: 1 }, autocomplete: "nickname" %>
+                <%= f.text_field :nickname, help_text: t("devise.invitations.edit.nickname_help", organization: current_organization.name), required: "required", prefix: { value: "@", small: 1, large: 1 } %>
               </div>
             </div>
 
             <% if f.object.class.require_password_on_accepting %>
               <div class="field">
-                <p><%= f.password_field :password, password_field_options_for(:user).except(:help_text) %></p>
+                <p><%= f.password_field :password, required: "required", minlength: ::Devise.password_length.min, maxlength: ::Devise.password_length.max %></p>
               </div>
+
               <div class="field">
-                <p><%= f.password_field :password_confirmation, password_field_options_for(:user).except(:help_text) %></p>
+                <p><%= f.password_field :password_confirmation, required: "required", minlength: ::Devise.password_length.min, maxlength: ::Devise.password_length.max %></p>
               </div>
             <% end %>
           </div>
@@ -38,34 +39,16 @@
 
         <div class="card" id="card__tos">
           <div class="card__content">
-            <h3><%= t("tos_title", scope: "decidim.devise.registrations.new") %></h3>
-
-            <div class="tos-text">
-              <% terms_and_conditions_summary_content_blocks.each do |content_block| %>
-                <%= cell content_block.manifest.cell, content_block %>
-              <% end %>
-            </div>
+            <fieldset>
+              <legend><%= t("tos_title", scope: "decidim.devise.registrations.new") %></legend>
+              <p class="tos-text"><%= strip_tags(translated_attribute(terms_and_conditions_page.content)) %></p>
+            </fieldset>
 
             <div class="field">
               <% link = link_to t("terms", scope: "decidim.devise.registrations.new"), page_path("terms-and-conditions"), target: "_blank" %>
               <% label = t("tos_agreement", scope: "decidim.devise.registrations.new", link: link) %>
               <%= f.check_box :tos_agreement, label: label, required: "required" %>
             </div>
-          </div>
-        </div>
-
-        <div class="card" id="card__newsletter">
-          <div class="card__content">
-
-            <fieldset>
-              <legend><%= t("newsletter_title", scope: "decidim.devise.registrations.new") %></legend>
-              <div class="field">
-                <%= label_tag :"#{resource_name}[newsletter_notifications]" do %>
-                  <%= check_box_tag :"#{resource_name}[newsletter_notifications]" %>
-                  <%= t("newsletter", scope: "decidim.devise.registrations.new") %>
-                <% end %>
-              </div>
-            </fieldset>
           </div>
         </div>
 
@@ -82,4 +65,3 @@
   </div>
 </div>
 </div>
-<%= javascript_include_tag("external_newsletter/remove_newsletter_modal") %>
