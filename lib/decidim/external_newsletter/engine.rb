@@ -13,13 +13,10 @@ module Decidim
         # Add engine routes here
       end
 
-      initializer "decidim_external_newsletter.assets" do |app|
-        app.config.assets.precompile += %w(decidim_external_newsletter_manifest.js)
-      end
       
       initializer "decidim_external_newsletter.add_cells_view_paths" do
         # Cell::ViewModel.view_paths << File.expand_path("#{Decidim::Budgets::Engine.root}/app/cells")
-        Cell::ViewModel.view_paths << File.expand_path("#{Decidim::Budgets::Engine.root}/app/views")
+        Cell::ViewModel.view_paths << File.expand_path("#{Decidim::Geo::Engine.root}/app/cells")
       end
 
 
