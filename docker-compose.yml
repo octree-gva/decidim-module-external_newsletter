@@ -1,14 +1,42 @@
+version: '3'
 services:
-  local_postgres:
-    image: postgres:12
-    volumes:
-      - pg-data-test:/var/lib/postgresql/data
+  app:
+    container_name: decidim-app
+    image: decidim-module-external-newsletter
+    build: .
+    entrypoint: ""
     environment:
-      - POSTGRES_PASSWORD=TEST-insecure-password
-      - POSTGRES_USER=decidim
-      - POSTGRES_DB=decidim_test
+      - RAILS_ENV=development
+      - RAILS_SERVE_STATIC_FILES=true
+      - DATABASE_URL=postgresql://decidim:pleaseChangeMe@pg:5432/decidim
+      - DATABASE_USERNAME=decidim
+      - DATABASE_PASSWORD=pleaseChangeMe
+      - DATABASE_HOST=pg
+      - DATABASE_PORT=5432
+      - SECRET_KEY_BASE=pleaseChangeMe
+      - DECIDIM_SYSTEM_PASSWORD=decidim123456
+      - DECIDIM_SYSTEM_EMAIL=system@example.org
+      - WEBPACK_DEV_SERVER=localhost
+    depends_on:
+      - pg
     ports:
-      - 5432:5432
+      - 3000:3000
+      - 3035:3035
+    volumes:
+      - .:/home/decidim/decidim_external_newsletter
+      - bundle:/home/decidim/app/vendor
+
+  pg:
+    container_name: decidim-postgres
+    image: postgres:14
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DATABASE=decidim
+      - POSTGRES_USER=decidim
+      - POSTGRES_PASSWORD=pleaseChangeMe
 
 volumes:
-  pg-data-test: {}
+  bundle: {}
+  migration: {}
+  pg_data: {}
